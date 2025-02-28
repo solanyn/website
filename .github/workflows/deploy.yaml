@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGO_VERSION: 0.145.0
-      CF_PAGES_URL: solanyn.dev
     permissions:
       contents: read
       packages: write
@@ -39,7 +38,7 @@ jobs:
 
       - name: Build
         run: |
-          hugo --minify --baseURL $CF_PAGES_URL
+          hugo --minify
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
