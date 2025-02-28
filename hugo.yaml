@@ -10,7 +10,7 @@ buildFuture: false
 buildExpired: false
 enableEmoji: true
 pygmentsUseClasses: true
-mainsections: ["home", "projects", "posts"]
+mainsections: ["home", "tags", "posts"]
 
 minify:
   disableXML: true
@@ -18,31 +18,32 @@ minify:
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
-  description: "Blog and portfolio of Andrew Chen"
+  description: "Andrew's Blog"
   author: Andrew
 
   defaultTheme: auto
-  ShowShareButtons: true
+  ShowShareButtons: false
   ShowReadingTime: true
   disableSpecial1stPost: true
   displayFullLangName: true
-  ShowPostNavLinks: true
+  ShowPostNavLinks: false
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: true
-  ShowRssButtonInSectionTermList: true
+  ShowRssButtonInSectionTermList: false
   ShowAllPagesInArchive: true
   ShowPageNums: true
-  ShowToc: true
+  ShowToc: false
   comments: true
 
-  homeInfoParams:
-    Title: "👋 Hi, I'm Andrew!"
-    Content: >
-      - I'm a MLOps engineer at $DAYJOB.
-
-      - I am a trained as a data scientist (Master of Data Science), but these days I act as a code janitor, write design docs for management, deploy and monitor things and if there's time, write code.
-
-      - Let's connect!
+  profileMode:
+    enabled: true
+    title: "👋 Hi, I'm Andrew!"
+    subtitle: "I do machine learning things"
+    buttons:
+      - name: Posts
+        url: "/posts"
+      - name: Search
+        url: "/search"
 
   socialIcons:
     - name: github
@@ -74,4 +75,14 @@ markup:
     guessSyntax: true
     lineNos: true
     style: monokai
+
+taxonomies:
+  tag = "tags"
+  categories = "categories"
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
 

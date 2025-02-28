@@ -1,3 +1,10 @@
+---
+date: '2025-02-28T15:49:14+11:00'
+draft: false
+title: 'Homelab Machine Learning'
+tags: ["ml stack", "mlops"]
+categories: ["machine-learning", "deployment", "k8s@home"]
+---
 # ml@home
 
 ML tooling is in a really weird place right now. At $DAYJOB we use Google Cloud's Vertex AI tools which works just okay. It does the job but it doesn't really feel cohesive? So after setting up a homelab kubernetes cluster, I explored the open-source ML tooling landscape. Here are some initial notes.
