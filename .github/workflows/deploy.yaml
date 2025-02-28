@@ -43,7 +43,8 @@ jobs:
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
 
       - name: Build
-        run: ["hugo", "--minify", "--baseURL", "$CF_PAGES_URL"]
+        run: |
+          hugo --minify --baseURL $CF_PAGES_URL
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
