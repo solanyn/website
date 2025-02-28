@@ -1,3 +1,77 @@
 baseURL: https://solanyn.dev/
 languageCode: en-us
-title: Hi | Andrew
+title: solanyn.dev
+theme: ["PaperMod"]
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+pygmentsUseClasses: true
+mainsections: ["home", "projects", "posts"]
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+params:
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  description: "Blog and portfolio of Andrew Chen"
+  author: Andrew
+
+  defaultTheme: auto
+  ShowShareButtons: true
+  ShowReadingTime: true
+  disableSpecial1stPost: true
+  displayFullLangName: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowRssButtonInSectionTermList: true
+  ShowAllPagesInArchive: true
+  ShowPageNums: true
+  ShowToc: true
+  comments: true
+
+  homeInfoParams:
+    Title: "👋 Hi, I'm Andrew!"
+    Content: >
+      - I'm a MLOps engineer at $DAYJOB.
+
+      - I am a trained as a data scientist (Master of Data Science), but these days I act as a code janitor, write design docs for management, deploy and monitor things and if there's time, write code.
+
+      - Let's connect!
+
+  socialIcons:
+    - name: github
+      title: See my GitHub profile
+      url: "https://github.com/solanyn"
+    - name: LinkedIn
+      title: Connect with me on LinkedIn
+      url: "https://linkedin.com/in/solanyn"
+    - name: Email
+      title: Send me an email
+      url: "mailto:hi@solanyn.dev"
+
+  editPost:
+    URL: "https://github.com/solanyn/website/tree/content"
+    Text: "Suggest Changes"
+    appendFilePath: true
+
+  assets:
+    disableHLJS: true
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    style: monokai
+
