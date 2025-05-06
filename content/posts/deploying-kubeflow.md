@@ -2,20 +2,20 @@
 
 ### Preamble
 
-I recently started contributing to the Kubeflow open-source project and have been following some recent GitHub discussions, watched Working Group (WG) call recordings (they run past midnight in my timezone :( ) and community calls. There are a lot of contributors from organisations who deploy Kubeflow internally and as vendors. One of the more popular requests from the community is to build Helm charts for deploying the Kubeflow platform.
+I recently started contributing to the Kubeflow open-source project and have been following some recent GitHub discussions, watched Working Group (WG) call recordings (they run past midnight in my timezone unfortunately) and community calls. Many contributors come from organizations that deploy Kubeflow internally or offer it as a managed service. One of the more popular requests from the community is to build Helm charts for deploying the Kubeflow platform.
 
 ### What on earth is Kubeflow?
 
-The Kubeflow platform is a collection of machine learning tools designed to be deployed on Kubernetes. Kubeflow components can be deployed on a community-maintained set of Kubernetes manifests ([kubeflow/manifests](https://github.com/kubeflow/manifests)) and provides a base for deploying the Kubeflow platform on Kubernetes. The repository holds a collection of Kustomize manifests upstreamed from each Kubeflow component. It also implements an [Istio](https://istio.io) service mesh which secures traffic between components along with other security measures like pod security standards, network policies, and authorization tokens. It can also be configured to use an external OAuth2 provider. The scope of designing Kubeflow Helm charts is enormous and no easy effort, which makes sense why the Kubeflow organisation chooses not to maintain a central distribution of Kubeflow and leaves this to vendors. Like many open-source projects, contributors are either funded (working time) by organisations or independently volunteer their own time. Kubeflow is already extremely complex to maintain to be security compliant for enterprises and has its own challenges designing and coordinating AI/ML tooling on Kubernetes.
+The Kubeflow platform is a collection of machine learning tools designed to be deployed on Kubernetes. Kubeflow is deployed via a community-maintained repository, kubeflow/manifests, which provides a collection of Kustomize manifests for each component. These manifests include Istio configuration, pod security standards, network policies, and token-based authorization. The repository holds a collection of Kustomize manifests upstreamed from each Kubeflow component. It also implements an [Istio](https://istio.io) service mesh which secures traffic between components along with other security measures like pod security standards, network policies, and authorization tokens. It can also be configured to use an external OAuth2 provider. The scope of designing Kubeflow Helm charts is enormous and no easy effort, which makes sense why the Kubeflow organisation chooses not to maintain a central distribution of Kubeflow. Like many open-source projects, contributions often come from developers funded by their organizations or volunteers contributing in their free time. Kubeflow is already extremely complex to maintain to be security compliant for enterprises and has its own challenges designing and coordinating AI/ML tooling on Kubernetes. Vendors tend to provide enterprise support for deploying the platform.
 
-I recently went through deploying a customised Kubeflow. I operate a [bare-metal Kubernetes cluster](https://github.com/solanyn/home-ops) using GitOps using [Flux](https://fluxcd.io). I usually reach for Helm charts and occasionally deploy operators and/or Custom Resource Definitions (CRDs) from manifests. I recently moved away from [Ingress NGINX Controller](https://kubernetes.github.io/ingress-nginx/) to the new [Gateway API](https://gateway-api.sigs.k8s.io) using the [Cilium Gateway implementation](https://docs.cilium.io/en/stable/network/servicemesh/gateway-api/gateway-api/) which posed some challenges with Istio.
+I recently went through deploying a customised Kubeflow. I operate a [bare-metal Kubernetes cluster](https://github.com/solanyn/home-ops) using GitOps powered by [Flux](https://fluxcd.io). A Flux controller in my cluster reads the latest changes in the repository and synchronises changes to my cluster. I usually reach for Helm charts since I find that they are the simplest to configure but occasionally deploy operators and/or Custom Resource Definitions (CRDs) from manifests if this is not an option. I recently moved away from [Ingress NGINX Controller](https://kubernetes.github.io/ingress-nginx/) to the new [Gateway API](https://gateway-api.sigs.k8s.io) using the [Cilium Gateway implementation](https://docs.cilium.io/en/stable/network/servicemesh/gateway-api/gateway-api/). This posed challenges because Istio's Gateway implementation and the Gateway API's evolving spec introduced compatibility and configuration issues. This should be resolved with the next Kubeflow platform release.
 
 Deploying the Kubeflow platform has a few external dependencies:
 
 - S3-compatible storage
-- MySQL database
-- Istio
-- Cert Manager
+- MySQL/MySQL-compatible database
+- Istio service mesh
+- Cert Manager for certificates
 
 I already deploy Cert Manager for certificates for my split-brain DNS setup to publicly expose services via Cloudflare DNS and Cloudflare tunnels and internal (only on my network) using External DNS and the external-dns-unifi-webhook and a MinIO deployment with an NFS backend to my NAS. I settled on MariaDB Operator for its convenient CRDs to create databases, users and grants and scheduled S3 backup and restore procedures.
 
@@ -27,8 +27,8 @@ Roughly speaking I went through the following steps:
 
 1. Write a GitHub Actions workflow to commit the latest non-release candidate tag of the manifests to my repository
 2. Add components to generate namespaces with the appropriate labels e.g., for Istio injection
-3. Add OAuth2 providers from my own [Pocket ID](https://pocket-id.org/) deployment and GitHub to the `dex` and `oauth2-proxy` deployments using ExternalSecret and ConfigMap definitions
-4. Add Kustomize patches to patch `dex` and `oauth2-proxy` deployments to mount the configuration I defined
+3. Configure secrets and OAuth2 settings for `dex` and `oauth2-proxy` using ExternalSecret and ConfigMap resources
+4. Add Kustomize patches to patch `dex` and `oauth2-proxy` deployments to mount the the configuration from secrets and/or configmaps
 5. Add an ExternalSecret manifest with configurations for ALL Kubeflow components
 6. Create Database objects for Kubeflow components that use MySQL/MySQL-compatible databases
 7. Add Kustomize patches to patch Kubeflow components (mainly Katib, Pipelines and Model Registry) to connect to my MariaDB cluster and the appropriate tables
@@ -37,4 +37,4 @@ Roughly speaking I went through the following steps:
 
 ### Conclusion
 
-Of course, things could break with the next release of manifests and I may have to go through the whole process again. The key things that I think will make this easily configurable are using Kustomize patches to update deployments. Being a contributor helps since I would be well-aware ahead of time if there are any significant manifest changes. There are plans to include some new features such as supporting Gateway API and using Istio Ambient mode which could pose some new challenges. Until then, thanks for reading!
+While future changes to the manifests could require rework, using Kustomize patches makes changes relatively easy to reconfigure. Being a contributor helps here, I would be aware of any breaking changes that could be introduced. Looking forward to the ongoing improvements like Gateway API support and Istio Ambient mode and how things will break in my cluster! Thanks for reading.
