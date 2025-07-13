@@ -1,9 +1,7 @@
 ---
 date: "2025-05-06T17:30:00+11:00"
-draft: false
 title: "Deploying Kubeflow"
-tags: ["platform"]
-categories: ["machine-learning", "kubernetes"]
+tags: ["machine-learning", "kubernetes"]
 ---
 
 # Deploying the Kubeflow platform
