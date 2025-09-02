@@ -5,7 +5,7 @@ title: About Me
 <div class="welcome">
 <div>
 
-Hi I'm Andrew 👋. I'm a ML/MLOps engineer trying to build fun things.
+Hi I'm Andrew 👋. I'm a ML/MLOps/AI engineer building things for fun.
 
 Here I write about things I'm working on, things I'm learning and things I find interesting.
 
